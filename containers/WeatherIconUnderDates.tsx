@@ -62,7 +62,7 @@ const PlaceHolder = styled.View`
 `;
 
 export default function WeatherIconUnderDate({ dailyData }: WeatherIconUnderDatesProps) {
-	console.log(dailyData);
+
 	return (
 		dailyData ?
 			<HorizontalWrapper>

@@ -6,6 +6,7 @@ import { getWeatherData } from '../components/api/weather';
 import EventPicker from '../components/EventPicker';
 import getImages from '../components/functions/getImages';
 import StyledText from '../components/StyledText';
+import SummaryView from '../components/SummaryView';
 import SunIcon from '../components/SunIcon';
 
 type WeatherDataType = {
@@ -120,6 +121,11 @@ type WeatherDataType = {
 		}]
 };
 
+type SelectedDateType = {
+	selectedDate: Date,
+	selectedIndex: number
+}
+
 const CurrentIcon = styled.Image`
 	width: 80px;
 	height: 80px;
@@ -159,7 +165,7 @@ const CurrentWeatherInfoWrapper = styled.View`
 
 export default function CurrentWeatherInfoContainer() {
 	const [weatherData, setWeatherData] = useState<WeatherDataType>();
-	const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+	const [selectedDate, setSelectedDate] = useState<SelectedDateType>({ selectedDate: new Date(), selectedIndex: 0 });
 
 	useEffect(() => {
 		getWeatherData().then((weatherData) => {
@@ -171,20 +177,22 @@ export default function CurrentWeatherInfoContainer() {
 
 	let currentDate = new Date();
 
+	console.log(weatherData?.daily);
+
 	return (
 		weatherData ?
 			<>
 				<CurrentWeatherInfoWrapper>
 					<CurrentWeatherWrapper>
-						<CurrentIcon source={getImages(weatherData.current.weather[0].main, weatherData.current.weather[0].icon)} />
+						<CurrentIcon source={getImages(weatherData.daily[selectedDate.selectedIndex].weather[0].main, weatherData.daily[selectedDate.selectedIndex].weather[0].icon)} />
 						{weatherData ?
-							<CurrentTemp>{Math.round(weatherData.current.temp - 273.15)}&deg;C</CurrentTemp> : <CurrentTemp>Loading...</CurrentTemp>
+							<CurrentTemp>{Math.round(weatherData.daily[selectedDate.selectedIndex].temp.day - 273.15)}&deg;C</CurrentTemp> : <CurrentTemp>Loading...</CurrentTemp>
 						}
-						<CurrentDate>{new Date().toDateString()}</CurrentDate>
-						<LowHighTemp>{Math.round(weatherData.daily[0].temp.min - 273.15)} / {Math.round(weatherData.daily[0].temp.max - 273.15)} &deg;C</LowHighTemp>
+						<CurrentDate>{selectedDate.selectedDate.toDateString()}</CurrentDate>
+						<LowHighTemp>{Math.round(weatherData.daily[selectedDate.selectedIndex].temp.min - 273.15)} / {Math.round(weatherData.daily[selectedDate.selectedIndex].temp.max - 273.15)} &deg;C</LowHighTemp>
 					</CurrentWeatherWrapper>
-					<SunIcon type="sunrise" time={weatherData.daily[0].sunrise} />
-					<SunIcon type="sunset" time={weatherData.daily[0].sunset} />
+					<SunIcon type="sunrise" time={weatherData.daily[selectedDate.selectedIndex].sunrise} />
+					<SunIcon type="sunset" time={weatherData.daily[selectedDate.selectedIndex].sunset} />
 				</CurrentWeatherInfoWrapper>
 				<CalendarStrip
 					style={{ height: '50px', top: '10px' }}
@@ -200,10 +208,12 @@ export default function CurrentWeatherInfoContainer() {
 					selectedDate={currentDate}
 					showMonth={false}
 					onDateSelected={(date) => {
-						setSelectedDate(new Date(moment(date).format()));
+						let selectedDate = new Date(moment(date).format());
+						setSelectedDate({ selectedDate: selectedDate, selectedIndex: selectedDate.getDate() - currentDate.getDate() });
 					}}
 				/>
-				<EventPicker hourlyData={weatherData.hourly} selectedDate={selectedDate} />
+				<EventPicker hourlyData={weatherData.hourly} selectedDate={selectedDate.selectedDate} />
+				<SummaryView dailyData={weatherData.daily} selectedIndex={selectedDate.selectedIndex} />
 			</>
 			:
 			<>

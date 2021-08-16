@@ -1,44 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import getWeatherApi from '../components/api/weather';
-import { Text, View } from '../components/Themed';
+import React from 'react';
+import styled from 'styled-components/native';
+import ArcIcon from '../components/ArcIcon';
+import CurrentWeatherInfoContainer from '../containers/CurrentWeatherInfoContainer';
 
-type WeatherNowStates = {
-	weatherData: {
-		currently: {
-			apparentTemperature: number,
-			humidity: number,
-			icon: string,
-			summary: string,
-			temperature: number,
-			time: Date
-		},
-		daily: {
-			apparentTemperatureHigh: number,
-			apparentTemperatureHighTime: Date,
-			apparentTemperatureLow: number,
-			apparentTemperatureLowTime: Date,
-		}
-	},
-	isLoading: boolean,
-	tempScale: "F" | "C",
-	selectedDate: Date,
-}
+
+const BlackBackground = styled.SafeAreaView`
+	width: 100%;
+	height: 100%;
+
+	background-color: black;
+`;
+
+const TopContainer = styled.View`
+	width: 100%;
+	flex-direction: row;
+	width: 100%;
+	height: 200px;
+	align-items: center;
+
+	padding-right: 37px;
+	padding-left: 37px;
+
+	position: relative;
+`;
 
 export default function WeatherNow() {
-	const [weatherData, setWeatherData] = useState<WeatherNowStates>();
 
-  useEffect(() => {
-	  getWeatherApi('F').then((weatherData) => {
-		  setWeatherData(weatherData);
-	  }).catch((error) => {
-		  console.log("There was an error getting the data", error)
-	  })
-  });
-
-  console.log(weatherData)
 	return (
-		<View>
-			<Text>Hello!</Text>
-		</View>
+		<BlackBackground>
+			<TopContainer>
+				<ArcIcon />
+			</TopContainer>
+			<CurrentWeatherInfoContainer />
+		</BlackBackground >
 	)
 }

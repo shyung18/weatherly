@@ -1,24 +1,15 @@
-type TempScaleType = 'F' | 'C'
+export async function getWeatherData() {
+  const ApiKey = "ebe7d40f50661876680f545220465e3b";
+  const lat = "37.729591";
+  const lon = "127.080259";
 
-export default async function getWeatherApi(tempScale: TempScaleType) {
-
-    const darkskyURL = "https://api.darksky.net/forecast";
-    //const ApiKey = "7711c2819f294564cb912e166a5bb983";
-    const ApiKey = "bc93403c5c01303ccfdb0fe8ab518409";    
-    const latLon = "42.589611,-70.819806";
-    //let tempScale;
+  //let tempScale;
   let response, responseJson;
-  if (tempScale == "F") {
-    try {
-      response = await fetch(darkskyURL + "/" + ApiKey + "/" + latLon);
-      return responseJson = await response.json();
-    } catch (error) {
-      return error; }
-  } else {
-    try {
-      response = await fetch(darkskyURL + "/" + ApiKey + "/" + latLon + "?units=si");
-	    return responseJson = await response.json();
-    } catch (error) {
-      return error; }
+
+  try {
+    response = await fetch('https://api.openweathermap.org/data/2.5/onecall?lat=' + lat + '&lon=' + lon + '&exclue=minutely' + '&appid=' + ApiKey);
+    return responseJson = await response.json();
+  } catch (error) {
+    return "Error: " + error;
   }
-  }
+}

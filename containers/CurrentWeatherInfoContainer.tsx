@@ -167,17 +167,17 @@ export default function CurrentWeatherInfoContainer() {
 	const [weatherData, setWeatherData] = useState<WeatherDataType>();
 	const [selectedDate, setSelectedDate] = useState<SelectedDateType>({ selectedDate: new Date(), selectedIndex: 0 });
 
+	let isSubscribed = true;
+
 	useEffect(() => {
 		getWeatherData().then((weatherData) => {
-			setWeatherData(weatherData);
+			if (isSubscribed) setWeatherData(weatherData);
 		}).catch((error) => {
 			console.log("There was an error getting the data", error);
 		})
 	}, []);
 
 	let currentDate = new Date();
-
-	console.log(weatherData?.daily);
 
 	return (
 		weatherData ?
@@ -212,8 +212,10 @@ export default function CurrentWeatherInfoContainer() {
 						setSelectedDate({ selectedDate: selectedDate, selectedIndex: selectedDate.getDate() - currentDate.getDate() });
 					}}
 				/>
+
 				<EventPicker hourlyData={weatherData.hourly} selectedDate={selectedDate.selectedDate} />
 				<SummaryView dailyData={weatherData.daily} selectedIndex={selectedDate.selectedIndex} />
+
 			</>
 			:
 			<>

@@ -72,19 +72,21 @@ const Temp = styled.Text`
 
 export default function SummaryView({ dailyData, selectedIndex }: SummaryViewProps) {
 	return (
-		<Wrapper>
-			<Container>
-				<Temp>{Math.round(dailyData[selectedIndex].temp.morn - 273.15)}</Temp>
-				<HeaderText>MORNING</HeaderText>
-			</Container>
-			<Container>
-				<Temp>{Math.round(dailyData[selectedIndex].temp.eve - 273.15)}</Temp>
-				<HeaderText>EVENING</HeaderText>
-			</Container>
-			<Container>
-				<Temp>{Math.round(dailyData[selectedIndex].temp.night - 273.15)}</Temp>
-				<HeaderText>NIGHT</HeaderText>
-			</Container>
-		</Wrapper>
+		<>
+			<Wrapper>
+				<Container>
+					<Temp>{Math.round(dailyData[selectedIndex].temp.morn - 273.15)}</Temp>
+					<HeaderText>MORNING</HeaderText>
+				</Container>
+				<Container>
+					<Temp>{Math.round(dailyData[selectedIndex].temp.eve - 273.15)}</Temp>
+					<HeaderText>EVENING</HeaderText>
+				</Container>
+				<Container>
+					<Temp>{Math.round(dailyData[selectedIndex].temp.night - 273.15)}</Temp>
+					<HeaderText>NIGHT</HeaderText>
+				</Container>
+			</Wrapper>
+		</>
 	)
 }

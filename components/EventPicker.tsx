@@ -30,10 +30,10 @@ interface EventPickerProps {
 };
 
 const EventPickerWrapper = styled.ScrollView`
-	height: 100%;
-
 	background-color: #151940;	
 	margin: 10px 15px;
+
+	max-height: ${(props: { height: number }) => props.height}px;
 `;
 
 const TimeSlot = styled.View`
@@ -58,21 +58,27 @@ const WeatherIcon = styled.Image`
 `;
 
 export default function EventPicker({ hourlyData, selectedDate }: EventPickerProps) {
-	return (
-		<EventPickerWrapper showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
-			{
-				hourlyData.map((data, index) => {
-					if (new Date(data.dt * 1000).getDate() == selectedDate.getDate()) {
-						return (
-
-							<TimeSlot key={data.dt}>
-								<Time>{(new Date(data.dt * 1000).toLocaleString([], { hour: 'numeric', hour12: true }))}</Time>
-								<WeatherIcon source={getImages(data.weather[0].main, data.weather[0].icon)} />
-							</TimeSlot>
-						);
-					}
-				})
+	const getCountOfTimeSlots = () => {
+		let count = 0;
+		let timeslots = new Array();
+		hourlyData.map((data, index) => {
+			if (new Date(data.dt * 1000).getDate() == selectedDate.getDate()) {
+				count++;
+				timeslots.push(
+					<TimeSlot key={data.dt}>
+						<Time>{(new Date(data.dt * 1000).toLocaleString([], { hour: 'numeric', hour12: true }))}</Time>
+						<WeatherIcon source={getImages(data.weather[0].main, data.weather[0].icon)} />
+					</TimeSlot>)
 			}
+		});
+		return { count, timeslots };
+	}
+
+	let countAndTimeslots = getCountOfTimeSlots();
+
+	return (
+		<EventPickerWrapper showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} height={countAndTimeslots.count < 6 ? 50 * countAndTimeslots.count : 300}>
+			{countAndTimeslots.timeslots}
 		</EventPickerWrapper>
 	)
 }

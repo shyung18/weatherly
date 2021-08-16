@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import getImages from '../components/functions/getImages';
 
 interface WeatherIconUnderDatesProps {
 	dailyData: Array<
@@ -66,13 +67,13 @@ export default function WeatherIconUnderDate({ dailyData }: WeatherIconUnderDate
 		dailyData ?
 			<HorizontalWrapper>
 				<PlaceHolder />
-				<WeatherIcon source={{ uri: 'http://openweathermap.org/img/wn/' + dailyData[0].weather[0].icon + '@2x.png' }} />
-				<WeatherIcon source={{ uri: 'http://openweathermap.org/img/wn/' + dailyData[1].weather[0].icon + '@2x.png' }} />
-				<WeatherIcon source={{ uri: 'http://openweathermap.org/img/wn/' + dailyData[2].weather[0].icon + '@2x.png' }} />
-				<WeatherIcon source={{ uri: 'http://openweathermap.org/img/wn/' + dailyData[3].weather[0].icon + '@2x.png' }} />
-				<WeatherIcon source={{ uri: 'http://openweathermap.org/img/wn/' + dailyData[4].weather[0].icon + '@2x.png' }} />
-				<WeatherIcon source={{ uri: 'http://openweathermap.org/img/wn/' + dailyData[5].weather[0].icon + '@2x.png' }} />
-				<WeatherIcon source={{ uri: 'http://openweathermap.org/img/wn/' + dailyData[6].weather[0].icon + '@2x.png' }} />
+				<WeatherIcon source={getImages(dailyData[0].weather[0].main, dailyData[0].weather[0].icon)} />
+				<WeatherIcon source={getImages(dailyData[1].weather[0].main, dailyData[1].weather[0].icon)} />
+				<WeatherIcon source={getImages(dailyData[2].weather[0].main, dailyData[2].weather[0].icon)} />
+				<WeatherIcon source={getImages(dailyData[3].weather[0].main, dailyData[3].weather[0].icon)} />
+				<WeatherIcon source={getImages(dailyData[4].weather[0].main, dailyData[4].weather[0].icon)} />
+				<WeatherIcon source={getImages(dailyData[5].weather[0].main, dailyData[5].weather[0].icon)} />
+				<WeatherIcon source={getImages(dailyData[6].weather[0].main, dailyData[6].weather[0].icon)} />
 				<PlaceHolder />
 			</HorizontalWrapper>
 			: <></>

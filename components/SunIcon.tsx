@@ -29,7 +29,7 @@ const SunIconStyled = styled.Image`
 	height: 45px;
 `;
 
-const SunRiseTemp = styled(StyledText)`
+const SunIconTime = styled(StyledText)`
 	color: white;
 `;
 
@@ -40,7 +40,7 @@ export default function SunIcon({ type, time }: SunIconProps) {
 		<SunIconWrapper>
 			<SunIconContainer type={type}>
 				<SunIconStyled source={require(`../assets/images/${type === 'sunrise' ? 'sunrise.png' : 'sunset.png'}`)} />
-				<SunRiseTemp>{convertToDate.getHours()}:{convertToDate.getMinutes()}</SunRiseTemp>
+				<SunIconTime>{convertToDate.getHours()}:{convertToDate.getMinutes()}</SunIconTime>
 			</SunIconContainer>
 		</SunIconWrapper>
 	);

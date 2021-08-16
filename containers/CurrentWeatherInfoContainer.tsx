@@ -1,10 +1,12 @@
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import CalendarStrip from 'react-native-calendar-strip';
 import styled from 'styled-components/native';
 import { getWeatherData } from '../components/api/weather';
-import CalendarStripStyled from '../components/CalendarStrip';
+import EventPicker from '../components/EventPicker';
+import getImages from '../components/functions/getImages';
 import StyledText from '../components/StyledText';
 import SunIcon from '../components/SunIcon';
-import WeatherIconUnderDates from '../containers/WeatherIconUnderDates';
 
 type WeatherDataType = {
 	"lat": number,
@@ -157,6 +159,7 @@ const CurrentWeatherInfoWrapper = styled.View`
 
 export default function CurrentWeatherInfoContainer() {
 	const [weatherData, setWeatherData] = useState<WeatherDataType>();
+	const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
 	useEffect(() => {
 		getWeatherData().then((weatherData) => {
@@ -166,12 +169,14 @@ export default function CurrentWeatherInfoContainer() {
 		})
 	}, []);
 
+	let currentDate = new Date();
+
 	return (
 		weatherData ?
 			<>
 				<CurrentWeatherInfoWrapper>
 					<CurrentWeatherWrapper>
-						<CurrentIcon source={{ uri: 'http://openweathermap.org/img/wn/' + weatherData.current.weather[0].icon + '@2x.png' }} />
+						<CurrentIcon source={getImages(weatherData.current.weather[0].main, weatherData.current.weather[0].icon)} />
 						{weatherData ?
 							<CurrentTemp>{Math.round(weatherData.current.temp - 273.15)}&deg;C</CurrentTemp> : <CurrentTemp>Loading...</CurrentTemp>
 						}
@@ -181,8 +186,24 @@ export default function CurrentWeatherInfoContainer() {
 					<SunIcon type="sunrise" time={weatherData.daily[0].sunrise} />
 					<SunIcon type="sunset" time={weatherData.daily[0].sunset} />
 				</CurrentWeatherInfoWrapper>
-				<CalendarStripStyled />
-				<WeatherIconUnderDates dailyData={weatherData.daily} />
+				<CalendarStrip
+					style={{ height: '50px', top: '10px' }}
+					calendarHeaderStyle={{ color: '#C9C9C9', fontFamily: "Quicksand-Light" }}
+					calendarColor={"#101432"}
+					dateNumberStyle={{ color: "#606060", fontFamily: "Quicksand-Light" }}
+					dateNameStyle={{ color: "#606060", fontFamily: "Quicksand-Light" }}
+					highlightDateNumberStyle={{ color: "#C9C9C9", fontFamily: "Quicksand-Light" }}
+					highlightDateNameStyle={{ color: "#C9C9C9", fontFamily: "Quicksand-Light" }}
+					iconContainer={{ justifyContent: 'space-between' }}
+					useIsoWeekday={false}
+					startingDate={currentDate}
+					selectedDate={currentDate}
+					showMonth={false}
+					onDateSelected={(date) => {
+						setSelectedDate(new Date(moment(date).format()));
+					}}
+				/>
+				<EventPicker hourlyData={weatherData.hourly} selectedDate={selectedDate} />
 			</>
 			:
 			<>

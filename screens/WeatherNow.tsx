@@ -8,7 +8,7 @@ const BlackBackground = styled.SafeAreaView`
 	width: 100%;
 	height: 100%;
 
-	background-color: black;
+	background-color: #101432;
 `;
 
 const TopContainer = styled.View`

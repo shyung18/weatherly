@@ -24,7 +24,7 @@ const TopContainer = styled.View`
 	position: relative;
 `;
 
-export default function WeatherNow() {
+export default function Home() {
 
 	return (
 		<BlackBackground>

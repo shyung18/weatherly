@@ -18,7 +18,7 @@ const SunIconContainer = styled.View`
 	align-items: center;
 
 	position: relative;
-	top: 30%;
+	top: 90px;
 
 	${(props: SunIconProps) =>
 		props.type === 'sunrise' && `width: 36%;`};
@@ -39,7 +39,7 @@ export default function SunIcon({ type, time }: SunIconProps) {
 	return (
 		<SunIconWrapper>
 			<SunIconContainer type={type}>
-				<SunIconStyled source={require(`../assets/images/${type === 'sunrise' ? 'sunrise.png' : 'sunset.png'}`)} />
+				<SunIconStyled source={type === 'sunrise' ? require(`../assets/images/sunrise.png`) : require('../assets/images/sunset.png')} />
 				<SunIconTime>{convertToDate.getHours()}:{convertToDate.getMinutes()}</SunIconTime>
 			</SunIconContainer>
 		</SunIconWrapper>

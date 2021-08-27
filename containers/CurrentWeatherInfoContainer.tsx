@@ -135,7 +135,6 @@ const CurrentWeatherWrapper = styled.View`
 	width: 100%;
 	flex-direction: column;
 	align-items: center;
-	bottom: 35px;
 `;
 
 const CurrentTemp = styled(StyledText)`
@@ -195,7 +194,7 @@ export default function CurrentWeatherInfoContainer() {
 					<SunIcon type="sunset" time={weatherData.daily[selectedDate.selectedIndex].sunset} />
 				</CurrentWeatherInfoWrapper>
 				<CalendarStrip
-					style={{ height: '50px', top: '10px' }}
+					style={{ height: 50 }}
 					calendarHeaderStyle={{ color: '#C9C9C9', fontFamily: "Quicksand-Light" }}
 					calendarColor={"#101432"}
 					dateNumberStyle={{ color: "#606060", fontFamily: "Quicksand-Light" }}

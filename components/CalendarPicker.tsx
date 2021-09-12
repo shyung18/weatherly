@@ -1,9 +1,10 @@
+import moment from 'moment';
 import React from 'react';
 import CalendarStrip from 'react-native-calendar-strip';
 
 interface ToggleProps {
 	currentDate: Date,
-	onClick: (event: Date) => void,
+	onClick: (event: moment.Moment | Date) => void,
 }
 
 export default function CalendarPicker({ currentDate, onClick }: ToggleProps) {

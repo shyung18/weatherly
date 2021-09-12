@@ -30,6 +30,7 @@ interface EventPickerProps {
 			"pop": number,
 		}>,
 	selectedDate: Date,
+	selectedIndex: number,
 	eventsData: Calendar.Event[]
 };
 
@@ -64,16 +65,24 @@ const WeatherIcon = styled.Image`
 
 const ButtonStyled = styled.TouchableOpacity`
 	width: 151px;
+	
 	border: none;
 	align-items: center;
 	justify-content: center;
 	margin-left: auto; 
 	margin-right: 0;
 	background-color: #DFE0E1;
+
+	z-index: 5;
 `;
 
 const PlusSign = styled(Text)`
 	color: #8B8B8B;
+	z-index: 1;
+`;
+
+const EventSign = styled(PlusSign)`
+	padding: 5px;
 `;
 
 const HourlyTempText = styled(Text)`
@@ -83,29 +92,86 @@ const HourlyTempText = styled(Text)`
 	color: #8E8E8E;
 `;
 
-export default function EventPicker({ eventsData, hourlyData, selectedDate }: EventPickerProps) {
+const EventSlotWrapper = styled.View`
+	display: flex;
+	flex-direction: column;
+
+	z-index: 5;
+	position: absolute;
+	right: 0;
+`;
+
+const EventSlot = styled.View`
+	z-index: 5;
+	position: relative;
+	top: 0px;
+	border-radius: 8px;
+	
+	width: 120px;
+	background-color: #F1D793;
+
+	height: ${(props: { height: number }) => props.height}px;
+
+	align-items: flex-start;
+`;
+
+export default function EventPicker({ selectedIndex, eventsData, hourlyData, selectedDate }: EventPickerProps) {
 	const navigation = useNavigation();
 	const [hasCalendarPermission, setHasCalendarPermission] = useState<boolean>(false);
+
+	useEffect(() => {
+		let todayEvents = new Array();
+
+		eventsData.map((event, index) => {
+			if (new Date(event.startDate).getDate() == selectedDate.getDate()) {
+				todayEvents.push(event);
+			}
+		});
+	})
 
 	const getCountOfTimeSlots = () => {
 		let count = 0;
 		let timeslots = new Array();
 
-		hourlyData.map((data, index) => {
+		let eventIndex = selectedIndex;
 
-			if (new Date(data.dt * 1000).getDate() == selectedDate.getDate()) {
+		while (eventsData[eventIndex] && new Date(eventsData[eventIndex].startDate).getDate() !== selectedDate.getDate()) eventIndex++;
+
+		hourlyData.map((data, index) => {
+			let weatherDate = new Date(data.dt * 1000);
+			let eventStartDate = null;
+			let eventEndDate = null;
+
+			if (eventsData[eventIndex]) {
+				eventStartDate = new Date(eventsData[eventIndex].startDate);
+				eventEndDate = new Date(eventsData[eventIndex].endDate);
+			}
+
+			if (weatherDate.getDate() == selectedDate.getDate()) {
 				count++;
+				let event = null;
+
+				if (eventStartDate && (weatherDate.getHours() === eventStartDate.getHours() && selectedDate.getDate() == eventStartDate.getDate())) {
+					let lengthOfEvent_mins = (new Date(eventsData[eventIndex].endDate).getTime() - eventStartDate.getTime()) / 60000;
+					event = (
+						<EventSlotWrapper>
+							<EventSlot height={lengthOfEvent_mins * 50 / 60}>
+								<EventSign>{eventsData[eventIndex].title}</EventSign>
+							</EventSlot>
+						</EventSlotWrapper>
+					);
+					eventIndex++;
+				}
 
 				timeslots.push(
 					<TimeSlot key={data.dt} style={new Date(data.dt * 1000).getHours() === 23 && { paddingBottom: 30 }}>
 						<Time>{(new Date(data.dt * 1000).toLocaleString([], { hour: 'numeric', hour12: true }))}</Time>
 						<WeatherIcon source={getImages(data.weather[0].main, data.weather[0].icon)} />
 						<HourlyTempText>{Math.round(data.temp - 273.15)}&deg;C</HourlyTempText>
-						<ButtonStyled onPress={() => hasCalendarPermission ? navigation.navigate('Event', { selectedTime: data.dt }) : requestCalendarPermission()}>
-							<PlusSign>+</PlusSign>
-						</ButtonStyled>
-					</TimeSlot >)
+						{event && event}
+					</TimeSlot >);
 			}
+
 		});
 
 		return { count, timeslots };

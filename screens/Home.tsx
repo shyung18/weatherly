@@ -1,14 +1,12 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import ArcIcon from '../components/ArcIcon';
+import { View } from '../components/Themed';
 import CurrentWeatherInfoContainer from '../containers/CurrentWeatherInfoContainer';
 
-
-const BlackBackground = styled.SafeAreaView`
+const BlackBackground = styled(View)`
 	width: 100%;
 	height: 100%;
-
-	background-color: #101432;
 `;
 
 const TopContainer = styled.View`
@@ -27,7 +25,7 @@ const TopContainer = styled.View`
 export default function Home() {
 
 	return (
-		<BlackBackground>
+		<BlackBackground >
 			<TopContainer>
 				<ArcIcon />
 			</TopContainer>

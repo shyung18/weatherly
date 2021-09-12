@@ -8,6 +8,7 @@ import getImages from '../components/functions/getImages';
 import StyledText from '../components/StyledText';
 import SummaryView from '../components/SummaryView';
 import SunIcon from '../components/SunIcon';
+import WeatherIconUnderDate from './WeatherIconUnderDates';
 
 type WeatherDataType = {
 	"lat": number,
@@ -159,7 +160,7 @@ const CurrentWeatherInfoWrapper = styled.View`
 	width: 100%;
 	position: absolute;
 
-	margin-top: 80px;
+	margin-top: 35px;
 `;
 
 export default function CurrentWeatherInfoContainer() {
@@ -194,24 +195,28 @@ export default function CurrentWeatherInfoContainer() {
 					<SunIcon type="sunset" time={weatherData.daily[selectedDate.selectedIndex].sunset} />
 				</CurrentWeatherInfoWrapper>
 				<CalendarStrip
-					style={{ height: 50 }}
-					calendarHeaderStyle={{ color: '#C9C9C9', fontFamily: "Quicksand-Light" }}
+					style={{ height: 50, marginTop: 20 }}
+					calendarHeaderStyle={{ color: '#C9C9C9', fontFamily: "avenir" }}
 					calendarColor={"#101432"}
-					dateNumberStyle={{ color: "#606060", fontFamily: "Quicksand-Light" }}
-					dateNameStyle={{ color: "#606060", fontFamily: "Quicksand-Light" }}
-					highlightDateNumberStyle={{ color: "#C9C9C9", fontFamily: "Quicksand-Light" }}
-					highlightDateNameStyle={{ color: "#C9C9C9", fontFamily: "Quicksand-Light" }}
+					dateNumberStyle={{ color: "#6F6E6E", fontFamily: "avenir" }}
+					dateNameStyle={{ color: "#6F6E6E", fontFamily: "avenir" }}
+					highlightDateNumberStyle={{ color: "#E5E5E5", fontFamily: "avenir" }}
+					highlightDateNameStyle={{ color: "#E5E5E5", fontFamily: "avenir" }}
 					iconContainer={{ justifyContent: 'space-between' }}
 					useIsoWeekday={false}
 					startingDate={currentDate}
 					selectedDate={currentDate}
 					showMonth={false}
+					iconStyle={{ width: 20 }}
 					onDateSelected={(date) => {
 						let selectedDate = new Date(moment(date).format());
-						setSelectedDate({ selectedDate: selectedDate, selectedIndex: selectedDate.getDate() - currentDate.getDate() });
+						let selectedIndex = selectedDate.getDate() - currentDate.getDate() >= 0 ?
+							selectedDate.getDate() - currentDate.getDate() : 1
+
+						setSelectedDate({ selectedDate: selectedDate, selectedIndex: selectedIndex });
 					}}
 				/>
-
+				<WeatherIconUnderDate dailyData={weatherData.daily} />
 				<EventPicker hourlyData={weatherData.hourly} selectedDate={selectedDate.selectedDate} />
 				<SummaryView dailyData={weatherData.daily} selectedIndex={selectedDate.selectedIndex} />
 

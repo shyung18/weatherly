@@ -7,8 +7,9 @@ import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 import { ColorSchemeName } from 'react-native';
+import EventScreen from '../screens/EventScreen';
+import Home from '../screens/Home';
 import NotFoundScreen from '../screens/NotFoundScreen';
-import WeatherNow from '../screens/WeatherNow';
 import { RootStackParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 
@@ -25,13 +26,15 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
 
 // A root stack navigator is often used for displaying modals on top of all other content
 // Read more here: https://reactnavigation.org/docs/modal
+// const Stack = createNativeStackNavigator<RootStackParamList>();
 const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Root" component={WeatherNow} />
+      <Stack.Screen name="Root" component={Home} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+      <Stack.Screen name="Event" component={EventScreen} />
     </Stack.Navigator>
   );
 }

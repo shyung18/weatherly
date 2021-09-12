@@ -35,12 +35,16 @@ const SunIconTime = styled(StyledText)`
 
 export default function SunIcon({ type, time }: SunIconProps) {
 	let convertToDate = time ? new Date(time * 1000) : new Date();
+	let hour = convertToDate.getHours() % 12;
+	hour = hour ? hour : 12;
+	let minutes = convertToDate.getMinutes();
+	let styledMinutes = minutes < 10 ? '0' + minutes : minutes + '';
 
 	return (
 		<SunIconWrapper>
 			<SunIconContainer type={type}>
 				<SunIconStyled source={type === 'sunrise' ? require(`../assets/images/sunrise.png`) : require('../assets/images/sunset.png')} />
-				<SunIconTime>{convertToDate.getHours()}:{convertToDate.getMinutes()}</SunIconTime>
+				<SunIconTime>{hour}:{styledMinutes} {type === 'sunrise' ? 'AM' : 'PM'}</SunIconTime>
 			</SunIconContainer>
 		</SunIconWrapper>
 	);

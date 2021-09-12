@@ -1,9 +1,9 @@
+import { useNavigation } from '@react-navigation/native';
 import * as Calendar from 'expo-calendar';
 import React, { useEffect, useState } from 'react';
-import { Alert, Platform } from 'react-native';
 import styled from 'styled-components/native';
+import { Text } from '../components/Themed';
 import getImages from './functions/getImages';
-
 
 interface EventPickerProps {
 	hourlyData: Array<
@@ -29,12 +29,13 @@ interface EventPickerProps {
 				}],
 			"pop": number,
 		}>,
-	selectedDate: Date
+	selectedDate: Date,
 };
 
 const EventPickerWrapper = styled.ScrollView`
-	background-color: #151940;	
-	margin: 10px 15px;
+	background-color: #262841;	
+	margin: 0 15px;
+	padding: 15px;
 
 	max-height: ${(props: { height: number }) => props.height}px;
 `;
@@ -44,14 +45,11 @@ const TimeSlot = styled.View`
 	flex-direction: row;
 `;
 
-const Time = styled.Text`
-	width: 70px;
-	padding: 10px;
+const Time = styled(Text)`
+	width: 49px;
+	line-height: 49px;
 	
 	font-size: 15px;
-	color: white;
-	fontFamily: "Quicksand-Light";
-
   	text-align: right;
 `;
 
@@ -61,105 +59,66 @@ const WeatherIcon = styled.Image`
 `;
 
 const ButtonStyled = styled.TouchableOpacity`
-	width: 190px;
-	border: 0.5px white;
+	width: 151px;
+	border: none;
 	align-items: center;
 	justify-content: center;
 	margin-left: auto; 
 	margin-right: 0;
+	background-color: #181B36;
 `;
 
-const PlusSign = styled.Text`
-	color: white;
+const PlusSign = styled(Text)`
+	color: #707070;
 `;
 
-async function getDefaultCalendarSource() {
-	const calendars = await Calendar.getCalendarsAsync(Calendar.EntityTypes.EVENT);
-	const defaultCalendars = calendars.filter(each => each.source.name === 'Default');
-	return defaultCalendars[0].source;
-}
+const HourlyTempText = styled(Text)`
+	font-size: 13px;
+	line-height: 45px;
+`;
 
-const createNewCalendar = async () => {
-	const defaultCalendarSource =
-		Platform.OS === 'ios'
-			? await getDefaultCalendarSource()
-			: { isLocalAccount: true, name: 'Expo Calendar', id: undefined, type: "" };
-	const newCalendarID = await Calendar.createCalendarAsync({
-		title: 'Expo Calendar',
-		color: 'blue',
-		entityType: Calendar.EntityTypes.EVENT,
-		sourceId: defaultCalendarSource.id,
-		source: defaultCalendarSource,
-		name: 'internalCalendarName',
-		ownerAccount: 'personal',
-		accessLevel: Calendar.CalendarAccessLevel.OWNER,
-	});
-
-	return newCalendarID;
-};
-
-const synchronizeCalendar = async () => {
-	const calendarId = await createNewCalendar();
-	try {
-		await addEventsToCalendar(calendarId);
-	} catch (e) {
-		Alert.alert(e.message);
-	}
-};
-
-const addEventsToCalendar = async (calendarId: string) => {
-	const currentDate = new Date();
-	const event = {
-		title: "EXAMPLE",
-		notes: "RANDOM NOTES",
-		startDate: currentDate,
-		endDate: new Date(currentDate.getTime() + 5 * 60000),
-		timeZone: "UTC-05:00"
-	};
-
-	try {
-		const createEventAsyncResNew = await Calendar.createEventAsync(
-			calendarId.toString(),
-			event
-		);
-		console.log(createEventAsyncResNew);
-		return createEventAsyncResNew;
-	} catch (error) {
-		console.log(error);
-	}
-};
 export default function EventPicker({ hourlyData, selectedDate }: EventPickerProps) {
-	const [calendarPermission, setCalendarPermission] = useState<boolean>(false);
+	const navigation = useNavigation();
+	const [hasCalendarPermission, setHasCalendarPermission] = useState<boolean>(false);
 
 	const getCountOfTimeSlots = () => {
 		let count = 0;
 		let timeslots = new Array();
+		// let selectedTimeIsWithin48Hours = selectedDate.getDate() - (new Date()).getDate() >= 0 ?  selectedDate.getDate() - (new Date()).getDate() < 2 : false;
+
+		// console.log(selectedTimeIsWithin48Hours);
 		hourlyData.map((data, index) => {
+
 			if (new Date(data.dt * 1000).getDate() == selectedDate.getDate()) {
 				count++;
+
 				timeslots.push(
-					<TimeSlot key={data.dt}>
+					<TimeSlot key={data.dt} style={new Date(data.dt * 1000).getHours() === 23 && { paddingBottom: 30 }}>
 						<Time>{(new Date(data.dt * 1000).toLocaleString([], { hour: 'numeric', hour12: true }))}</Time>
 						<WeatherIcon source={getImages(data.weather[0].main, data.weather[0].icon)} />
-						<ButtonStyled onPress={() => calendarPermission && synchronizeCalendar()}>
+						<HourlyTempText>{Math.round(data.temp - 273.15)}&deg;C</HourlyTempText>
+						<ButtonStyled onPress={() => hasCalendarPermission ? navigation.navigate('Event', { selectedTime: data.dt }) : requestCalendarPermission()}>
 							<PlusSign>+</PlusSign>
 						</ButtonStyled>
-					</TimeSlot>)
+					</TimeSlot >)
 			}
 		});
+
 		return { count, timeslots };
 	}
+
+	const requestCalendarPermission = async () => {
+		const { status } = await Calendar.requestCalendarPermissionsAsync();
+		if (status === 'granted') {
+			setHasCalendarPermission(true);
+		}
+		else setHasCalendarPermission(false);
+	};
 
 	let countAndTimeslots = getCountOfTimeSlots();
 
 	useEffect(() => {
-		(async () => {
-			const { status } = await Calendar.requestCalendarPermissionsAsync();
-			if (status === 'granted') {
-				setCalendarPermission(true);
-			}
-			else setCalendarPermission(false);
-		})();
+		requestCalendarPermission();
 	}, []);
 
 

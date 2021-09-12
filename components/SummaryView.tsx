@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import { Text } from '../components/Themed';
 
 type SummaryViewProps = {
 	dailyData: Array<
@@ -60,14 +61,12 @@ const Wrapper = styled.View`
 	padding: 0px 30px;
 `;
 
-const HeaderText = styled.Text`
+const HeaderText = styled(Text)`
 	font-size: 15px;
-	color: white;
 `;
 
-const Temp = styled.Text`
+const Temp = styled(Text)`
 	font-size: 20px;
-	color: white;
 `;
 
 export default function SummaryView({ dailyData, selectedIndex }: SummaryViewProps) {

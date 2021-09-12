@@ -1,10 +1,12 @@
+import { Event } from 'expo-calendar';
 import { LocationGeocodedAddress } from 'expo-location';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import CalendarStrip from 'react-native-calendar-strip';
 import styled from 'styled-components/native';
 import { getWeatherData } from '../components/api/weather';
+import CalendarPicker from '../components/CalendarPicker';
 import EventPicker from '../components/EventPicker';
+import getCalendarEvents from '../components/functions/getCalendarEvents';
 import getImages from '../components/functions/getImages';
 import StyledText from '../components/StyledText';
 import SummaryView from '../components/SummaryView';
@@ -166,12 +168,6 @@ const CurrentWeatherInfoWrapper = styled.View`
 	margin-top: 50px;
 `;
 
-const CurrentLocationWrapper = styled.View`
-	position: relative;
-	width: 100%;
-	height: 100px;
-`;
-
 const CurrentLocationView = styled.View`
 	position: absolute;
 	top: -15px;
@@ -190,12 +186,17 @@ const CurrentLocationText = styled(Text)`
 `;
 
 export default function CurrentWeatherInfoContainer() {
+	const [eventsData, setEventsData] = useState<Event[]>();
 	const [weatherData, setWeatherData] = useState<WeatherDataType>();
 	const [selectedDate, setSelectedDate] = useState<SelectedDateType>({ selectedDate: new Date(), selectedIndex: 0 });
 
 	let isSubscribed = true;
 
 	useEffect(() => {
+		getCalendarEvents().then((eventsData) => {
+			setEventsData(eventsData);
+		});
+
 		getWeatherData().then((weatherData) => {
 			if (isSubscribed) setWeatherData(weatherData);
 		}).catch((error) => {
@@ -203,18 +204,19 @@ export default function CurrentWeatherInfoContainer() {
 		})
 	}, []);
 
+	const handleOnClick = (date: moment.Moment) => {
+		let selectedDate = new Date(moment(date).format());
+		let selectedIndex = selectedDate.getDate() - currentDate.getDate() >= 0 ?
+			selectedDate.getDate() - currentDate.getDate() : 1
+
+		setSelectedDate({ selectedDate: selectedDate, selectedIndex: selectedIndex });
+	}
+
 	let currentDate = new Date();
 
 	return (
 		weatherData ?
 			<>
-				{/* <CurrentLocationWrapper>
-					<CurrentLocationView>
-						<CurrentLocationText>
-							{weatherData.location[0].city}
-						</CurrentLocationText>
-					</CurrentLocationView>
-				</CurrentLocationWrapper> */}
 				<CurrentWeatherInfoWrapper>
 					<CurrentLocationView>
 						<CurrentLocationText>
@@ -232,30 +234,7 @@ export default function CurrentWeatherInfoContainer() {
 					<SunIcon type="sunrise" time={weatherData.daily[selectedDate.selectedIndex].sunrise} />
 					<SunIcon type="sunset" time={weatherData.daily[selectedDate.selectedIndex].sunset} />
 				</CurrentWeatherInfoWrapper>
-				<CalendarStrip
-					style={{ height: 50, marginTop: 28, paddingRight: 12, paddingLeft: 12 }}
-					calendarHeaderStyle={{ color: '#C9C9C9', fontFamily: "avenir" }}
-					calendarColor={"#F4F7FA"}
-					dateNumberStyle={{ color: "#7C7C7C", fontFamily: "avenir", fontSize: 19 }}
-					dateNameStyle={{ color: "#6F6E6E", fontFamily: "avenir", fontSize: 11 }}
-					highlightDateNumberStyle={{ color: "#7C7C7C", fontFamily: "avenir", opacity: 0.3, fontSize: 19 }}
-					highlightDateNameStyle={{ color: "#6F6E6E", fontFamily: "avenir", opacity: 0.3, fontSize: 11 }}
-					iconContainer={{ justifyContent: 'space-between', marginTop: 28 }}
-					useIsoWeekday={false}
-					startingDate={currentDate}
-					selectedDate={currentDate}
-					showMonth={false}
-					iconStyle={{ width: 20 }}
-					leftSelector={[]}
-					rightSelector={[]}
-					onDateSelected={(date) => {
-						let selectedDate = new Date(moment(date).format());
-						let selectedIndex = selectedDate.getDate() - currentDate.getDate() >= 0 ?
-							selectedDate.getDate() - currentDate.getDate() : 1
-
-						setSelectedDate({ selectedDate: selectedDate, selectedIndex: selectedIndex });
-					}}
-				/>
+				<CalendarPicker currentDate={currentDate} onClick={(date: moment.Moment) => handleOnClick(date)} />
 				<WeatherIconUnderDate dailyData={weatherData.daily} />
 				<EventPicker hourlyData={weatherData.hourly} selectedDate={selectedDate.selectedDate} />
 				<SummaryView dailyData={weatherData.daily} selectedIndex={selectedDate.selectedIndex} />

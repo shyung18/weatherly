@@ -1,6 +1,5 @@
 import { Event } from 'expo-calendar';
 import { LocationGeocodedAddress } from 'expo-location';
-import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import { getWeatherData } from '../components/api/weather';
@@ -204,12 +203,11 @@ export default function CurrentWeatherInfoContainer() {
 		})
 	}, []);
 
-	const handleOnClick = (date: moment.Moment) => {
-		let selectedDate = new Date(moment(date).format());
-		let selectedIndex = selectedDate.getDate() - currentDate.getDate() >= 0 ?
-			selectedDate.getDate() - currentDate.getDate() : 1
+	const handleOnClick = (date: Date) => {
+		let selectedIndex = date.getDate() - currentDate.getDate() >= 0 ?
+			date.getDate() - currentDate.getDate() : 1
 
-		setSelectedDate({ selectedDate: selectedDate, selectedIndex: selectedIndex });
+		setSelectedDate({ selectedDate: date, selectedIndex: selectedIndex });
 	}
 
 	let currentDate = new Date();
@@ -234,9 +232,9 @@ export default function CurrentWeatherInfoContainer() {
 					<SunIcon type="sunrise" time={weatherData.daily[selectedDate.selectedIndex].sunrise} />
 					<SunIcon type="sunset" time={weatherData.daily[selectedDate.selectedIndex].sunset} />
 				</CurrentWeatherInfoWrapper>
-				<CalendarPicker currentDate={currentDate} onClick={(date: moment.Moment) => handleOnClick(date)} />
+				<CalendarPicker currentDate={currentDate} onClick={(date: Date) => handleOnClick(date)} />
 				<WeatherIconUnderDate dailyData={weatherData.daily} />
-				<EventPicker hourlyData={weatherData.hourly} selectedDate={selectedDate.selectedDate} />
+				<EventPicker eventsData={eventsData} hourlyData={weatherData.hourly} selectedDate={selectedDate.selectedDate} />
 				<SummaryView dailyData={weatherData.daily} selectedIndex={selectedDate.selectedIndex} />
 
 			</>

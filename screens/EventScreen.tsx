@@ -1,4 +1,4 @@
-import DateTimePicker from '@react-native-community/datetimepicker';
+// import DateTimePicker from '@react-native-community/datetimepicker';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { Keyboard } from 'react-native';
@@ -169,7 +169,7 @@ export default function EventScreen({ }: EventScreenRouteProp) {
 					</TitleContainer>
 					<DateTimePickerContainer>
 						<StartText>Starts</StartText>
-						<DateTimePicker
+						{/* <DateTimePicker
 							display="spinner"
 							value={userInput.startDate ? userInput.startDate : selectedStartDate}
 							mode="time"
@@ -177,11 +177,11 @@ export default function EventScreen({ }: EventScreenRouteProp) {
 							onChange={(event, newDate) => {
 								setUserInput({ ...userInput, startDate: newDate })
 							}}
-						/>
+						/> */}
 					</DateTimePickerContainer>
 					<DateTimePickerContainer>
 						<StartText>Ends</StartText>
-						<DateTimePicker
+						{/* <DateTimePicker
 							display="spinner"
 							value={userInput.endDate ? userInput.endDate : startingEndDate}
 							mode="time"
@@ -189,7 +189,7 @@ export default function EventScreen({ }: EventScreenRouteProp) {
 							onChange={(event, newDate) => {
 								setUserInput({ ...userInput, endDate: newDate })
 							}}
-						/>
+						/> */}
 					</DateTimePickerContainer>
 				</EventChooserContainer>
 				<NotesContainer>

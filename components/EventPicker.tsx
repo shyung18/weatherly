@@ -30,6 +30,7 @@ interface EventPickerProps {
 			"pop": number,
 		}>,
 	selectedDate: Date,
+	eventsData: Calendar.Event[]
 };
 
 const EventPickerWrapper = styled.ScrollView`
@@ -82,16 +83,14 @@ const HourlyTempText = styled(Text)`
 	color: #8E8E8E;
 `;
 
-export default function EventPicker({ hourlyData, selectedDate }: EventPickerProps) {
+export default function EventPicker({ eventsData, hourlyData, selectedDate }: EventPickerProps) {
 	const navigation = useNavigation();
 	const [hasCalendarPermission, setHasCalendarPermission] = useState<boolean>(false);
 
 	const getCountOfTimeSlots = () => {
 		let count = 0;
 		let timeslots = new Array();
-		// let selectedTimeIsWithin48Hours = selectedDate.getDate() - (new Date()).getDate() >= 0 ?  selectedDate.getDate() - (new Date()).getDate() < 2 : false;
 
-		// console.log(selectedTimeIsWithin48Hours);
 		hourlyData.map((data, index) => {
 
 			if (new Date(data.dt * 1000).getDate() == selectedDate.getDate()) {

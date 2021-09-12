@@ -18,7 +18,7 @@ const SunIconContainer = styled.View`
 	align-items: center;
 
 	position: relative;
-	top: 90px;
+	top: 80px;
 
 	${(props: SunIconProps) =>
 		props.type === 'sunrise' && `width: 36%;`};

@@ -1,3 +1,4 @@
+import { LocationGeocodedAddress } from 'expo-location';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import CalendarStrip from 'react-native-calendar-strip';
@@ -8,6 +9,7 @@ import getImages from '../components/functions/getImages';
 import StyledText from '../components/StyledText';
 import SummaryView from '../components/SummaryView';
 import SunIcon from '../components/SunIcon';
+import { Text } from '../components/Themed';
 import WeatherIconUnderDate from './WeatherIconUnderDates';
 
 type WeatherDataType = {
@@ -119,7 +121,8 @@ type WeatherDataType = {
 			"tags": [
 				string
 			]
-		}]
+		}],
+	"location": LocationGeocodedAddress[]
 };
 
 type SelectedDateType = {
@@ -129,7 +132,7 @@ type SelectedDateType = {
 
 const CurrentIcon = styled.Image`
 	width: 80px;
-	height: 80px;
+	height: 60px;
 `;
 
 const CurrentWeatherWrapper = styled.View`
@@ -160,7 +163,30 @@ const CurrentWeatherInfoWrapper = styled.View`
 	width: 100%;
 	position: absolute;
 
-	margin-top: 35px;
+	margin-top: 50px;
+`;
+
+const CurrentLocationWrapper = styled.View`
+	position: relative;
+	width: 100%;
+	height: 100px;
+`;
+
+const CurrentLocationView = styled.View`
+	position: absolute;
+	top: -15px;
+	
+	width: 63px;
+	padding: 8px 5px;
+	margin-left: 15px;
+	border-radius: 6px;
+
+	background-color: #CDD6DE;
+`;
+
+const CurrentLocationText = styled(Text)`
+	font-size: 13px;
+	color: #6F6E6E;
 `;
 
 export default function CurrentWeatherInfoContainer() {
@@ -182,7 +208,19 @@ export default function CurrentWeatherInfoContainer() {
 	return (
 		weatherData ?
 			<>
+				{/* <CurrentLocationWrapper>
+					<CurrentLocationView>
+						<CurrentLocationText>
+							{weatherData.location[0].city}
+						</CurrentLocationText>
+					</CurrentLocationView>
+				</CurrentLocationWrapper> */}
 				<CurrentWeatherInfoWrapper>
+					<CurrentLocationView>
+						<CurrentLocationText>
+							{weatherData.location[0].city}
+						</CurrentLocationText>
+					</CurrentLocationView>
 					<CurrentWeatherWrapper>
 						<CurrentIcon source={getImages(weatherData.daily[selectedDate.selectedIndex].weather[0].main, weatherData.daily[selectedDate.selectedIndex].weather[0].icon)} />
 						{weatherData ?

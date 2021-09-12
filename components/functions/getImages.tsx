@@ -1,12 +1,12 @@
-let clearSkyDay = require('../../assets/images/weather-icons_clear-day-2.png');
-let clearSkyNight = require('../../assets/images/weather-icons_clear-night-2.png');
-let scatteredClouds = require('../../assets/images/weather-icons_cloudy-2.png');
-let mist = require('../../assets/images/weather-icons_fog-2.png');
-let fewCloudsDay = require('../../assets/images/weather-icons_partly-cloudy-day-2.png');
-let fewCloudsNight = require('../../assets/images/weather-icons_partly-cloudy-night-2.png');
-let rain = require('../../assets/images/weather-icons_rain-2.png');
-let snow = require('../../assets/images/weather-icons_snow-2.png');
-let thunderstorm = require('../../assets/images/weather-icons_thunderstorm-2.png');
+let clearSkyDay = require('../../assets/images/weather-icons_clear-day.png');
+let clearSkyNight = require('../../assets/images/weather-icons_clear-night.png');
+let scatteredClouds = require('../../assets/images/weather-icons_cloudy.png');
+let mist = require('../../assets/images/weather-icons_fog.png');
+let fewCloudsDay = require('../../assets/images/weather-icons_partly-cloudy-day.png');
+let fewCloudsNight = require('../../assets/images/weather-icons_partly-cloudy-night.png');
+let rain = require('../../assets/images/weather-icons_rain.png');
+let snow = require('../../assets/images/weather-icons_snow.png');
+let thunderstorm = require('../../assets/images/weather-icons_thunderstorm.png');
 
 export default function getImageIcon(main: string, icon: string) {
 

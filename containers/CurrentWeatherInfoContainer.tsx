@@ -139,20 +139,20 @@ const CurrentWeatherWrapper = styled.View`
 `;
 
 const CurrentTemp = styled(StyledText)`
-	font-size: 34px;
-
-	color: white;
-	
+	font-size: 33px;
+	color: #626262;
 `;
 
 const CurrentDate = styled(StyledText)`
-	font-size: 16px;
-	color: grey;
+	font-size: 14px;
+	color: #626262;
+
+	padding-bottom: 9px;
 `;
 
 const LowHighTemp = styled(StyledText)`
-	font-size: 12px;
-	color: grey;
+	font-size: 14px;
+	color: #626262;
 `;
 
 //Change padding top for different screen sizes to match the sunrise and sunset icons
@@ -195,19 +195,21 @@ export default function CurrentWeatherInfoContainer() {
 					<SunIcon type="sunset" time={weatherData.daily[selectedDate.selectedIndex].sunset} />
 				</CurrentWeatherInfoWrapper>
 				<CalendarStrip
-					style={{ height: 50, marginTop: 20 }}
+					style={{ height: 50, marginTop: 28, paddingRight: 12, paddingLeft: 12 }}
 					calendarHeaderStyle={{ color: '#C9C9C9', fontFamily: "avenir" }}
-					calendarColor={"#101432"}
-					dateNumberStyle={{ color: "#6F6E6E", fontFamily: "avenir" }}
-					dateNameStyle={{ color: "#6F6E6E", fontFamily: "avenir" }}
-					highlightDateNumberStyle={{ color: "#E5E5E5", fontFamily: "avenir" }}
-					highlightDateNameStyle={{ color: "#E5E5E5", fontFamily: "avenir" }}
-					iconContainer={{ justifyContent: 'space-between' }}
+					calendarColor={"#F4F7FA"}
+					dateNumberStyle={{ color: "#7C7C7C", fontFamily: "avenir", fontSize: 19 }}
+					dateNameStyle={{ color: "#6F6E6E", fontFamily: "avenir", fontSize: 11 }}
+					highlightDateNumberStyle={{ color: "#7C7C7C", fontFamily: "avenir", opacity: 0.3, fontSize: 19 }}
+					highlightDateNameStyle={{ color: "#6F6E6E", fontFamily: "avenir", opacity: 0.3, fontSize: 11 }}
+					iconContainer={{ justifyContent: 'space-between', marginTop: 28 }}
 					useIsoWeekday={false}
 					startingDate={currentDate}
 					selectedDate={currentDate}
 					showMonth={false}
 					iconStyle={{ width: 20 }}
+					leftSelector={[]}
+					rightSelector={[]}
 					onDateSelected={(date) => {
 						let selectedDate = new Date(moment(date).format());
 						let selectedIndex = selectedDate.getDate() - currentDate.getDate() >= 0 ?

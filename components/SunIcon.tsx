@@ -30,7 +30,9 @@ const SunIconStyled = styled.Image`
 `;
 
 const SunIconTime = styled(StyledText)`
-	color: white;
+	color: #626262;
+	font-size: 12px;
+	padding-top: 10px;
 `;
 
 export default function SunIcon({ type, time }: SunIconProps) {

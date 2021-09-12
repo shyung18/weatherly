@@ -33,9 +33,10 @@ interface EventPickerProps {
 };
 
 const EventPickerWrapper = styled.ScrollView`
-	background-color: #262841;	
+	background-color: #E7E9EB;	
 	margin: 0 15px;
 	padding: 15px;
+	border-radius: 12px;
 
 	max-height: ${(props: { height: number }) => props.height}px;
 `;
@@ -46,11 +47,13 @@ const TimeSlot = styled.View`
 `;
 
 const Time = styled(Text)`
-	width: 49px;
+	width: 55px;
 	line-height: 49px;
 	
-	font-size: 15px;
+	font-size: 18px;
   	text-align: right;
+
+	color: #8E8E8E;
 `;
 
 const WeatherIcon = styled.Image`
@@ -65,16 +68,18 @@ const ButtonStyled = styled.TouchableOpacity`
 	justify-content: center;
 	margin-left: auto; 
 	margin-right: 0;
-	background-color: #181B36;
+	background-color: #DFE0E1;
 `;
 
 const PlusSign = styled(Text)`
-	color: #707070;
+	color: #8B8B8B;
 `;
 
 const HourlyTempText = styled(Text)`
 	font-size: 13px;
 	line-height: 45px;
+
+	color: #8E8E8E;
 `;
 
 export default function EventPicker({ hourlyData, selectedDate }: EventPickerProps) {
@@ -126,7 +131,7 @@ export default function EventPicker({ hourlyData, selectedDate }: EventPickerPro
 		<EventPickerWrapper
 			showsHorizontalScrollIndicator={false}
 			showsVerticalScrollIndicator={false}
-			height={countAndTimeslots.count < 6 ? 50 * countAndTimeslots.count : 300}
+			height={countAndTimeslots.count < 6 ? 60 * countAndTimeslots.count : 320}
 		>
 			{countAndTimeslots.timeslots}
 		</EventPickerWrapper>

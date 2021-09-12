@@ -4,9 +4,10 @@ import ArcIcon from '../components/ArcIcon';
 import { View } from '../components/Themed';
 import CurrentWeatherInfoContainer from '../containers/CurrentWeatherInfoContainer';
 
-const BlackBackground = styled(View)`
+const Background = styled(View)`
 	width: 100%;
 	height: 100%;
+	background-color: #F4F7FA;
 `;
 
 const TopContainer = styled.View`
@@ -25,11 +26,11 @@ const TopContainer = styled.View`
 export default function Home() {
 
 	return (
-		<BlackBackground >
+		<Background>
 			<TopContainer>
 				<ArcIcon />
 			</TopContainer>
 			<CurrentWeatherInfoContainer />
-		</BlackBackground >
+		</Background >
 	)
 }

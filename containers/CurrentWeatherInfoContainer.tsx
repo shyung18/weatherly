@@ -6,6 +6,7 @@ import styled from 'styled-components/native';
 import { getWeatherData } from '../components/api/weather';
 import CalendarPicker from '../components/CalendarPicker';
 import EventPicker from '../components/EventPicker';
+import changeTempScale from '../components/functions/changeTempScale';
 import getCalendarEvents from '../components/functions/getCalendarEvents';
 import getImages from '../components/functions/getImages';
 import StyledText from '../components/StyledText';
@@ -132,6 +133,8 @@ type SelectedDateType = {
 	selectedIndex: number
 }
 
+type TempScaleType = "C" | "F";
+
 const CurrentIcon = styled.Image`
 	width: 80px;
 	height: 60px;
@@ -171,10 +174,22 @@ const CurrentWeatherInfoWrapper = styled.View`
 const CurrentLocationView = styled.View`
 	position: absolute;
 	top: -15px;
+	min-width: 70px;
 	
-	width: 63px;
 	padding: 8px 5px;
 	margin-left: 15px;
+	border-radius: 6px;
+
+	background-color: #CDD6DE;
+`;
+
+const TempScaleView = styled.TouchableHighlight`
+	position: absolute;
+	top: -15px;
+	right: 15px;
+	min-width: 70px;
+	
+	padding: 8px 5px;
 	border-radius: 6px;
 
 	background-color: #CDD6DE;
@@ -183,12 +198,17 @@ const CurrentLocationView = styled.View`
 const CurrentLocationText = styled(Text)`
 	font-size: 13px;
 	color: #6F6E6E;
+
+	align-self:center;
 `;
+
+const TempScaleText = styled(CurrentLocationText)``;
 
 export default function CurrentWeatherInfoContainer() {
 	const [eventsData, setEventsData] = useState<Event[]>();
 	const [weatherData, setWeatherData] = useState<WeatherDataType>();
 	const [selectedDate, setSelectedDate] = useState<SelectedDateType>({ selectedDate: new Date(), selectedIndex: 0 });
+	const [tempScale, setTempScale] = useState<TempScaleType>("C");
 
 	let isSubscribed = true;
 
@@ -214,6 +234,17 @@ export default function CurrentWeatherInfoContainer() {
 		setSelectedDate({ selectedDate: selectedDate, selectedIndex: selectedIndex });
 	};
 
+	const handleTempScaleOnClick = () => {
+		setTempScale(tempScale == 'C' ? 'F' : 'C');
+	}
+
+	let dayTemp, minTemp, maxTemp;
+	if (weatherData) {
+		dayTemp = changeTempScale(tempScale, weatherData.daily[selectedDate.selectedIndex].temp.day);
+		minTemp = changeTempScale(tempScale, weatherData.daily[selectedDate.selectedIndex].temp.min);
+		maxTemp = changeTempScale(tempScale, weatherData.daily[selectedDate.selectedIndex].temp.max);
+	}
+
 	return (
 		weatherData ?
 			<>
@@ -226,18 +257,26 @@ export default function CurrentWeatherInfoContainer() {
 					<CurrentWeatherWrapper>
 						<CurrentIcon source={getImages(weatherData.daily[selectedDate.selectedIndex].weather[0].main, weatherData.daily[selectedDate.selectedIndex].weather[0].icon)} />
 						{weatherData ?
-							<CurrentTemp>{Math.round(weatherData.daily[selectedDate.selectedIndex].temp.day - 273.15)}&deg;C</CurrentTemp> : <CurrentTemp>Loading...</CurrentTemp>
+							<CurrentTemp>{dayTemp}&deg;{tempScale}
+							</CurrentTemp>
+							:
+							<CurrentTemp>Loading...</CurrentTemp>
 						}
 						<CurrentDate>{selectedDate.selectedDate.toDateString()}</CurrentDate>
-						<LowHighTemp>{Math.round(weatherData.daily[selectedDate.selectedIndex].temp.min - 273.15)} / {Math.round(weatherData.daily[selectedDate.selectedIndex].temp.max - 273.15)} &deg;C</LowHighTemp>
+						<LowHighTemp>{minTemp} / {maxTemp} &deg;{tempScale}</LowHighTemp>
 					</CurrentWeatherWrapper>
 					<SunIcon type="sunrise" time={weatherData.daily[selectedDate.selectedIndex].sunrise} />
 					<SunIcon type="sunset" time={weatherData.daily[selectedDate.selectedIndex].sunset} />
+					<TempScaleView onPress={() => handleTempScaleOnClick()}>
+						<TempScaleText>
+							C&deg; / F&deg;
+						</TempScaleText>
+					</TempScaleView>
 				</CurrentWeatherInfoWrapper>
 				<CalendarPicker currentDate={selectedDate.selectedDate} onClick={(date: moment.Moment) => handleOnClick(date)} />
 				<WeatherIconUnderDate dailyData={weatherData.daily} />
-				<EventPicker eventsData={eventsData} hourlyData={weatherData.hourly} selectedDate={selectedDate.selectedDate} selectedIndex={selectedDate.selectedIndex} />
-				<SummaryView dailyData={weatherData.daily} selectedIndex={selectedDate.selectedIndex} />
+				<EventPicker tempScale={tempScale} eventsData={eventsData} hourlyData={weatherData.hourly} selectedDate={selectedDate.selectedDate} selectedIndex={selectedDate.selectedIndex} />
+				<SummaryView tempScale={tempScale} dailyData={weatherData.daily} selectedIndex={selectedDate.selectedIndex} />
 
 			</>
 			:

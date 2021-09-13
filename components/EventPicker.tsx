@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as Calendar from 'expo-calendar';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
+import changeTempScale from '../components/functions/changeTempScale';
 import { Text } from '../components/Themed';
 import getImages from './functions/getImages';
 
@@ -31,7 +32,8 @@ interface EventPickerProps {
 		}>,
 	selectedDate: Date,
 	selectedIndex: number,
-	eventsData: Calendar.Event[]
+	eventsData: Calendar.Event[],
+	tempScale: 'C' | 'F'
 };
 
 const EventPickerWrapper = styled.ScrollView`
@@ -106,6 +108,7 @@ const EventSlot = styled.View`
 	position: relative;
 	top: 0px;
 	border-radius: 8px;
+	border: 1px solid grey;
 	
 	width: 120px;
 	background-color: #F1D793;
@@ -115,7 +118,7 @@ const EventSlot = styled.View`
 	align-items: flex-start;
 `;
 
-export default function EventPicker({ selectedIndex, eventsData, hourlyData, selectedDate }: EventPickerProps) {
+export default function EventPicker({ tempScale, selectedIndex, eventsData, hourlyData, selectedDate }: EventPickerProps) {
 	const navigation = useNavigation();
 	const [hasCalendarPermission, setHasCalendarPermission] = useState<boolean>(false);
 
@@ -167,7 +170,7 @@ export default function EventPicker({ selectedIndex, eventsData, hourlyData, sel
 					<TimeSlot key={data.dt} style={new Date(data.dt * 1000).getHours() === 23 && { paddingBottom: 30 }}>
 						<Time>{(new Date(data.dt * 1000).toLocaleString([], { hour: 'numeric', hour12: true }))}</Time>
 						<WeatherIcon source={getImages(data.weather[0].main, data.weather[0].icon)} />
-						<HourlyTempText>{Math.round(data.temp - 273.15)}&deg;C</HourlyTempText>
+						<HourlyTempText>{changeTempScale(tempScale, data.temp)}&deg;{tempScale}</HourlyTempText>
 						{event && event}
 					</TimeSlot >);
 			}

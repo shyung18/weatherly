@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { Text } from '../components/Themed';
+import changeTempScale from './functions/changeTempScale';
 
 type SummaryViewProps = {
 	dailyData: Array<
@@ -44,6 +45,7 @@ type SummaryViewProps = {
 			"uvi": number,
 		}>,
 	selectedIndex: number,
+	tempScale: 'C' | 'F'
 }
 
 const Wrapper = styled.View`
@@ -106,25 +108,25 @@ const Line = styled.View`
 	border: 1px solid #CDD6DE;
 `;
 
-export default function SummaryView({ dailyData, selectedIndex }: SummaryViewProps) {
+export default function SummaryView({ tempScale, dailyData, selectedIndex }: SummaryViewProps) {
 	return (
 		<Wrapper>
 			<Container>
 				<TempContainer>
 					<HeaderText>MORNING</HeaderText>
-					<Temp>{Math.round(dailyData[selectedIndex].temp.morn - 273.15)} &deg;C</Temp>
+					<Temp>{changeTempScale(tempScale, dailyData[selectedIndex].temp.morn)} &deg;{tempScale}</Temp>
 				</TempContainer>
 				<TempContainer>
 					<HeaderText>DAY</HeaderText>
-					<Temp>{Math.round(dailyData[selectedIndex].temp.day - 273.15)} &deg;C</Temp>
+					<Temp>{changeTempScale(tempScale, dailyData[selectedIndex].temp.day)} &deg;{tempScale}</Temp>
 				</TempContainer>
 				<TempContainer>
 					<HeaderText>EVENING</HeaderText>
-					<Temp>{Math.round(dailyData[selectedIndex].temp.eve - 273.15)} &deg;C</Temp>
+					<Temp>{changeTempScale(tempScale, dailyData[selectedIndex].temp.eve)} &deg;{tempScale}</Temp>
 				</TempContainer>
 				<TempContainer>
 					<HeaderText>NIGHT</HeaderText>
-					<Temp>{Math.round(dailyData[selectedIndex].temp.night - 273.15)} &deg;C</Temp>
+					<Temp>{changeTempScale(tempScale, dailyData[selectedIndex].temp.night)} &deg;{tempScale}</Temp>
 				</TempContainer>
 			</Container>
 			<Line />

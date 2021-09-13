@@ -5,6 +5,12 @@
 #### This app is for anyone who wants to plan events based on the weather. It has a week-based calendar where it shows you the weather summary for that day, including the current, low and high temperatures, sunrise and sunset times, and humidity and wind speed. 
 #### Each day is divided into hours, and each hour is described by an weather icon and temperature during that time. The app automatically pulls data from the default calendar on the phone and adds it onto the app's calendar. 
 
+## Try it out!
+1. Install Expo Go from the device's App Store
+2. Clone repository
+3. run 'npm start'
+4. Scan the QR code and run it on your phone
+
 ## This is an ongoing project. 
 The following still has to be done:
 

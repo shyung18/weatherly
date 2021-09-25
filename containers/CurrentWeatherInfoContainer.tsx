@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import { Event } from 'expo-calendar';
 import { LocationGeocodedAddress } from 'expo-location';
 import moment from 'moment';
@@ -245,6 +246,8 @@ export default function CurrentWeatherInfoContainer() {
 		maxTemp = changeTempScale(tempScale, weatherData.daily[selectedDate.selectedIndex].temp.max);
 	}
 
+	const navigation = useNavigation();
+
 	return (
 		weatherData ?
 			<>
@@ -275,7 +278,7 @@ export default function CurrentWeatherInfoContainer() {
 				</CurrentWeatherInfoWrapper>
 				<CalendarPicker currentDate={selectedDate.selectedDate} onClick={(date: moment.Moment) => handleOnClick(date)} />
 				<WeatherIconUnderDate dailyData={weatherData.daily} />
-				<EventPicker tempScale={tempScale} eventsData={eventsData} hourlyData={weatherData.hourly} selectedDate={selectedDate.selectedDate} selectedIndex={selectedDate.selectedIndex} />
+				<EventPicker navigation={navigation} tempScale={tempScale} eventsData={eventsData} hourlyData={weatherData.hourly} selectedDate={selectedDate.selectedDate} selectedIndex={selectedDate.selectedIndex} />
 				<SummaryView tempScale={tempScale} dailyData={weatherData.daily} selectedIndex={selectedDate.selectedIndex} />
 
 			</>

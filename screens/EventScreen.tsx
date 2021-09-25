@@ -16,14 +16,19 @@ type HomeScreenRouteParams = {
 
 const TextInputStyle = `
 	width: 100%;
-	padding: 10px;
-	border: 1px grey;
-	color: grey;
+	padding: 14px 15px;
+	
+	border-radius: 6px;
+
+	color: #6F6E6E;
+	background-color: #E7E9EB;
 `;
 
 const CancelAndSubmitButtonStyle = `
-	padding: 20px 40px;
-	background-color: white;
+	padding: 16px 48px;
+	border-radius: 6px;
+	
+	background-color: #838697;
 `;
 
 const Container = styled.View`
@@ -35,6 +40,8 @@ const Container = styled.View`
 	justify-content: space-between;
 
 	padding: 70px 30px;
+
+	background-color: #F4F7FA;
 `;
 
 const EventChooserContainer = styled.View`
@@ -67,9 +74,12 @@ const DateTimePickerContainer = styled.View`
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	padding: 0 10px;
+	padding: 18px 19px;
 
-	border: 1px grey;
+	border: 0.5px #707070;
+	border-radius: 6px;
+
+	margin-bottom: 10px;
 `;
 
 const ButtonContainer = styled.View`
@@ -82,28 +92,27 @@ const ButtonContainer = styled.View`
 	align-self: flex-end;
 `;
 
-const NotesContainer = styled.View`
-	border: 1px grey;
-`;
-
 const NotesText = styled.TextInput`
+	${TextInputStyle}
 	height: 150px;
 	justify-content: flex-start;
-	padding: 10px;
-	color: white;
 `;
 
 const NewEventText = styled(Text)`
-	font-size: 24px;
+	font-size: 15px;
+	color: #888A99;
 `;
 
 const SelectedDateText = styled(Text)`
-	font-size: 24px;
+	font-size: 15px;
+	color: #888A99;
 `;
 
 const StartText = styled(Text)`
-	font-size: 16px;
+	font-size: 12px;
 	align-self: center;
+
+	color: #6F6E6E;
 `;
 
 const CancelAndSubmitText = styled(Text)`
@@ -112,6 +121,8 @@ const CancelAndSubmitText = styled(Text)`
 
 const Title = styled.TextInput`
 	${TextInputStyle}
+
+	margin-bottom: 7px;
 `;
 
 const Location = styled.TextInput`
@@ -160,10 +171,10 @@ export default function EventScreen({ }: EventScreenRouteProp) {
 						<SelectedDateText>{selectedStartDate.toLocaleDateString()}</SelectedDateText>
 					</HeaderContainer>
 					<TitleContainer>
-						<Title placeholder="Title" onChangeText={(newTitle) => {
+						<Title placeholder="Title" placeholderTextColor="#6F6E6E" onChangeText={(newTitle) => {
 							setUserInput({ ...userInput, title: newTitle })
 						}} />
-						<Location placeholder="Location" onChangeText={(newLocation) => {
+						<Location placeholder="Location" placeholderTextColor="#6F6E6E" onChangeText={(newLocation) => {
 							setUserInput({ ...userInput, location: newLocation })
 						}} />
 					</TitleContainer>
@@ -192,14 +203,12 @@ export default function EventScreen({ }: EventScreenRouteProp) {
 						/> */}
 					</DateTimePickerContainer>
 				</EventChooserContainer>
-				<NotesContainer>
-					<NotesText
-						placeholder="Notes"
-						multiline
-						placeholderTextColor="grey"
-						onSubmitEditing={() => Keyboard.dismiss()}
-					/>
-				</NotesContainer>
+				<NotesText
+					placeholder="Notes"
+					multiline
+					placeholderTextColor="#6F6E6E"
+					onSubmitEditing={() => Keyboard.dismiss()}
+				/>
 			</KeyboardAwareScrollView>
 			<ButtonContainer>
 				<CancelButton>

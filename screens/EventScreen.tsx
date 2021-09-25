@@ -1,4 +1,4 @@
-// import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { Keyboard } from 'react-native';
@@ -109,7 +109,7 @@ const SelectedDateText = styled(Text)`
 `;
 
 const StartText = styled(Text)`
-	font-size: 12px;
+	font-size: 15px;
 	align-self: center;
 
 	color: #6F6E6E;
@@ -140,16 +140,16 @@ const SubmitButton = styled.TouchableOpacity`
 export default function EventScreen({ }: EventScreenRouteProp) {
 	const route = useRoute<RouteProp<Record<string, HomeScreenRouteParams>, string>>();
 	const selectedTimeDt = Object.values(route.params)[0];
-	const selectedStartDate = new Date(selectedTimeDt * 1000);
-	const startingEndDate = new Date(selectedStartDate.getTime() + 30 * 60000);
+	const selectedStartDate_auto = new Date(selectedTimeDt * 1000);
+	const startingEndDate_auto = new Date(selectedStartDate_auto.getTime() + 30 * 60000);
 
 	const [userInput, setUserInput] =
 		useState<{ title: string, location: string, startDate: Date | undefined, endDate: Date | undefined }>(
 			{
 				title: "",
 				location: "",
-				startDate: selectedStartDate,
-				endDate: startingEndDate
+				startDate: selectedStartDate_auto,
+				endDate: startingEndDate_auto
 			});
 
 	const navigation = useNavigation();
@@ -168,7 +168,7 @@ export default function EventScreen({ }: EventScreenRouteProp) {
 				<EventChooserContainer>
 					<HeaderContainer>
 						<NewEventText>NEW EVENT</NewEventText>
-						<SelectedDateText>{selectedStartDate.toLocaleDateString()}</SelectedDateText>
+						<SelectedDateText>{selectedStartDate_auto.toLocaleDateString()}</SelectedDateText>
 					</HeaderContainer>
 					<TitleContainer>
 						<Title placeholder="Title" placeholderTextColor="#6F6E6E" onChangeText={(newTitle) => {
@@ -180,27 +180,29 @@ export default function EventScreen({ }: EventScreenRouteProp) {
 					</TitleContainer>
 					<DateTimePickerContainer>
 						<StartText>Starts</StartText>
-						{/* <DateTimePicker
+						<DateTimePicker
 							display="spinner"
-							value={userInput.startDate ? userInput.startDate : selectedStartDate}
+							value={userInput.startDate ? userInput.startDate : selectedStartDate_auto}
 							mode="time"
-							style={{ width: 200, height: 100 }}
+							textColor="#6F6E6E"
+							style={{ width: 200, height: 50, backgroundColor: "#F4F7FA" }}
 							onChange={(event, newDate) => {
 								setUserInput({ ...userInput, startDate: newDate })
 							}}
-						/> */}
+						/>
 					</DateTimePickerContainer>
 					<DateTimePickerContainer>
 						<StartText>Ends</StartText>
-						{/* <DateTimePicker
+						<DateTimePicker
 							display="spinner"
-							value={userInput.endDate ? userInput.endDate : startingEndDate}
+							value={userInput.endDate ? userInput.endDate : startingEndDate_auto}
 							mode="time"
-							style={{ width: 200, height: 100 }}
+							textColor="#6F6E6E"
+							style={{ width: 200, height: 50, backgroundColor: "#F4F7FA" }}
 							onChange={(event, newDate) => {
 								setUserInput({ ...userInput, endDate: newDate })
 							}}
-						/> */}
+						/>
 					</DateTimePickerContainer>
 				</EventChooserContainer>
 				<NotesText

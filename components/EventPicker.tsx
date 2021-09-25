@@ -200,7 +200,7 @@ export default function EventPicker({ navigation, tempScale, selectedIndex, even
 			selectedTime: number, eventStartDate?: Date,
 			eventEndDate?: Date
 		}) => {
-		navigation.navigate("Event", { selectedTime, eventStartDate, eventEndDate }, {});
+		navigation.navigate("Event", { selectedTime }, {});
 	};
 
 	const requestCalendarPermission = async () => {
@@ -224,7 +224,6 @@ export default function EventPicker({ navigation, tempScale, selectedIndex, even
 			height={countAndTimeslots.count < 6 ? 60 * countAndTimeslots.count : 320}
 		>
 			{countAndTimeslots.timeslots}
-			{/* <ButtonStyled></ButtonStyled> */}
 		</EventPickerWrapper>
 	)
 }

@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
 import * as Calendar from 'expo-calendar';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
@@ -7,6 +6,7 @@ import { Text } from '../components/Themed';
 import getImages from './functions/getImages';
 
 interface EventPickerProps {
+	navigation: any,
 	hourlyData: Array<
 		{
 			"dt": number,
@@ -66,14 +66,18 @@ const WeatherIcon = styled.Image`
 `;
 
 const ButtonStyled = styled.TouchableOpacity`
+	position: absolute;
 	width: 151px;
+	height: 100%;
+	right: 0;
+	opacity: 0.5;
 	
 	border: none;
 	align-items: center;
 	justify-content: center;
 	margin-left: auto; 
 	margin-right: 0;
-	background-color: #DFE0E1;
+	background-color: red;
 
 	z-index: 5;
 `;
@@ -94,13 +98,15 @@ const HourlyTempText = styled(Text)`
 	color: #8E8E8E;
 `;
 
-const EventSlotWrapper = styled.View`
+const EventSlotWrapper = styled.TouchableHighlight`
 	display: flex;
 	flex-direction: column;
 
 	z-index: 5;
 	position: absolute;
 	right: 0;
+
+	${(props: { noEvent: boolean }) => props.noEvent && 'opacity: 0'}
 `;
 
 const EventSlot = styled.View`
@@ -118,8 +124,7 @@ const EventSlot = styled.View`
 	align-items: flex-start;
 `;
 
-export default function EventPicker({ tempScale, selectedIndex, eventsData, hourlyData, selectedDate }: EventPickerProps) {
-	const navigation = useNavigation();
+export default function EventPicker({ navigation, tempScale, selectedIndex, eventsData, hourlyData, selectedDate }: EventPickerProps) {
 	const [hasCalendarPermission, setHasCalendarPermission] = useState<boolean>(false);
 
 	useEffect(() => {
@@ -157,13 +162,21 @@ export default function EventPicker({ tempScale, selectedIndex, eventsData, hour
 				if (eventStartDate && (weatherDate.getHours() === eventStartDate.getHours() && selectedDate.getDate() == eventStartDate.getDate())) {
 					let lengthOfEvent_mins = (new Date(eventsData[eventIndex].endDate).getTime() - eventStartDate.getTime()) / 60000;
 					event = (
-						<EventSlotWrapper>
+						<EventSlotWrapper noEvent={false} onPress={() => goToCalendarPicker(data.dt, eventStartDate, eventEndDate)}>
 							<EventSlot height={lengthOfEvent_mins * 50 / 60}>
 								<EventSign>{eventsData[eventIndex].title}</EventSign>
 							</EventSlot>
 						</EventSlotWrapper>
 					);
 					eventIndex++;
+				} else {
+					event = (
+						<EventSlotWrapper noEvent onPress={() => goToCalendarPicker(data.dt)}>
+							<EventSlot height={50}>
+								<EventSign>NONE</EventSign>
+							</EventSlot>
+						</EventSlotWrapper>
+					);
 				}
 
 				timeslots.push(
@@ -180,6 +193,16 @@ export default function EventPicker({ tempScale, selectedIndex, eventsData, hour
 		return { count, timeslots };
 	}
 
+	const goToCalendarPicker = (
+		selectedTime,
+		eventStartDate?,
+		eventEndDate?: {
+			selectedTime: number, eventStartDate?: Date,
+			eventEndDate?: Date
+		}) => {
+		navigation.navigate("Event", { selectedTime }, {});
+	};
+
 	const requestCalendarPermission = async () => {
 		const { status } = await Calendar.requestCalendarPermissionsAsync();
 		if (status === 'granted') {
@@ -193,7 +216,6 @@ export default function EventPicker({ tempScale, selectedIndex, eventsData, hour
 	useEffect(() => {
 		requestCalendarPermission();
 	}, []);
-
 
 	return (
 		<EventPickerWrapper

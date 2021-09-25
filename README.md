@@ -17,9 +17,8 @@ This app is for anyone who wants to plan events based on the weather. It has a w
 ## This is an ongoing project. 
 The following still has to be done:
 
-1. Add events on the App that automatically gets added to the phone's calendar 
-2. Change from Celcius to Fahrenheit and vice versa
-3. Edit existing events
+1. Edit existing events
+2. Automatically update after adding events to the device's calendar
 
 
 

@@ -6,7 +6,7 @@ This app is for anyone who wants to plan events based on the weather. It has a w
 
 ***Because I'm using a free API, I can only get hourly weather data up to 48 hours. So, the app only shows limited hourly data.***
 
-![](project.gif)
+![](weatherly.gif)
 
 ## Try it out!
 1. Install Expo Go from the device's App Store

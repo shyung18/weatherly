@@ -19,6 +19,7 @@ The following still has to be done:
 
 1. Edit existing events
 2. Automatically update after adding events to the device's calendar
+3. Testing on Android devices and different screen sizes (only tested on iPhone X)
 
 
 

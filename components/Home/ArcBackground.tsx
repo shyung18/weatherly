@@ -24,7 +24,7 @@ const ArcIconStyled = styled.Image`
 export default function ArcBackground() {
 	return (
 		<ArcContainer>
-			<ArcIconStyled source={require('../assets/images/arc.png')} />
+			<ArcIconStyled source={require('../../assets/images/arc.png')} />
 		</ArcContainer>
 	);
 }

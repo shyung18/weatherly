@@ -1,9 +1,9 @@
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { Keyboard } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styled from 'styled-components/native';
+import DateTimePicker from '../components/Event/DateTimePicker';
 import StyledText from '../components/StyledText';
 import addEventsToCalendar from '../functions/addEventToCalendar';
 import { RootStackParamList } from '../types';
@@ -108,13 +108,6 @@ const SelectedDateText = styled(StyledText)`
 	color: #888A99;
 `;
 
-const StartText = styled(StyledText)`
-	font-size: 15px;
-	align-self: center;
-
-	color: #6F6E6E;
-`;
-
 const CancelAndSubmitText = styled(StyledText)`
 	font-size: 16px;
 `;
@@ -178,39 +171,27 @@ export default function Event({ }: EventRouteProp) {
 							setUserInput({ ...userInput, location: newLocation })
 						}} />
 					</TitleContainer>
-					<DateTimePickerContainer>
-						<StartText>Starts</StartText>
-						<DateTimePicker
-							display="spinner"
-							value={userInput.startDate ? userInput.startDate : selectedStartDate_auto}
-							mode="time"
-							textColor="#6F6E6E"
-							style={{ width: 200, height: 50, backgroundColor: "#F4F7FA" }}
-							onChange={(event, newDate) => {
-								setUserInput({ ...userInput, startDate: newDate })
-							}}
-						/>
-					</DateTimePickerContainer>
-					<DateTimePickerContainer>
-						<StartText>Ends</StartText>
-						<DateTimePicker
-							display="spinner"
-							value={userInput.endDate ? userInput.endDate : startingEndDate_auto}
-							mode="time"
-							textColor="#6F6E6E"
-							style={{ width: 200, height: 50, backgroundColor: "#F4F7FA" }}
-							onChange={(event, newDate) => {
-								setUserInput({ ...userInput, endDate: newDate })
-							}}
-						/>
-					</DateTimePickerContainer>
+					<DateTimePicker
+						type="start"
+						date={userInput.startDate ? userInput.startDate : selectedStartDate_auto}
+						onChange={(event, newDate) => {
+							setUserInput({ ...userInput, startDate: newDate })
+						}}
+					/>
+					<DateTimePicker
+						type="end"
+						date={userInput.endDate ? userInput.endDate : startingEndDate_auto}
+						onChange={(event, newDate) => {
+							setUserInput({ ...userInput, endDate: newDate })
+						}}
+					/>
+					<NotesText
+						placeholder="Notes"
+						multiline
+						placeholderTextColor="#6F6E6E"
+						onSubmitEditing={() => Keyboard.dismiss()}
+					/>
 				</EventChooserContainer>
-				<NotesText
-					placeholder="Notes"
-					multiline
-					placeholderTextColor="#6F6E6E"
-					onSubmitEditing={() => Keyboard.dismiss()}
-				/>
 			</KeyboardAwareScrollView>
 			<ButtonContainer>
 				<CancelButton>

@@ -1,9 +1,9 @@
 import * as Calendar from 'expo-calendar';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
-import changeTempScale from '../components/functions/changeTempScale';
-import { Text } from '../components/Themed';
-import getImages from './functions/getImages';
+import changeTempScale from '../../functions/changeTempScale';
+import getImages from '../../functions/getIconImages';
+import StyledText from '../StyledText';
 
 interface EventPickerProps {
 	navigation: any,
@@ -50,7 +50,7 @@ const TimeSlot = styled.View`
 	flex-direction: row;
 `;
 
-const Time = styled(Text)`
+const Time = styled(StyledText)`
 	width: 55px;
 	line-height: 49px;
 	
@@ -82,7 +82,7 @@ const ButtonStyled = styled.TouchableOpacity`
 	z-index: 5;
 `;
 
-const PlusSign = styled(Text)`
+const PlusSign = styled(StyledText)`
 	color: #8B8B8B;
 	z-index: 1;
 `;
@@ -91,7 +91,7 @@ const EventSign = styled(PlusSign)`
 	padding: 5px;
 `;
 
-const HourlyTempText = styled(Text)`
+const HourlyTempText = styled(StyledText)`
 	font-size: 13px;
 	line-height: 45px;
 

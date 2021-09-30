@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { Text } from '../components/Themed';
-import changeTempScale from './functions/changeTempScale';
+import changeTempScale from '../../functions/changeTempScale';
+import StyledText from '../StyledText';
 
 type SummaryViewProps = {
 	dailyData: Array<
@@ -80,7 +80,7 @@ const Container = styled.View`
 	padding: 25px 30px 16.5px 30px;
 `;
 
-const HeaderText = styled(Text)`
+const HeaderText = styled(StyledText)`
 	font-size: 15px;
 	color: #6F6E6E;
 `;
@@ -89,7 +89,7 @@ const HumWindHeaderText = styled(HeaderText)`
 	margin-right: 10px;
 `;
 
-const Temp = styled(Text)`
+const Temp = styled(StyledText)`
 	font-size: 17px;
 	color: #6F6E6E;
 `;

@@ -4,11 +4,11 @@ import React, { useState } from 'react';
 import { Keyboard } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styled from 'styled-components/native';
-import addEventsToCalendar from '../components/functions/addEventToCalendar';
-import { Text } from '../components/Themed';
+import StyledText from '../components/StyledText';
+import addEventsToCalendar from '../functions/addEventToCalendar';
 import { RootStackParamList } from '../types';
 
-type EventScreenRouteProp = RouteProp<RootStackParamList, 'Event'>;
+type EventRouteProp = RouteProp<RootStackParamList, 'Event'>;
 
 type HomeScreenRouteParams = {
 	seleectedTime: number,
@@ -98,24 +98,24 @@ const NotesText = styled.TextInput`
 	justify-content: flex-start;
 `;
 
-const NewEventText = styled(Text)`
+const NewEventText = styled(StyledText)`
 	font-size: 15px;
 	color: #888A99;
 `;
 
-const SelectedDateText = styled(Text)`
+const SelectedDateText = styled(StyledText)`
 	font-size: 15px;
 	color: #888A99;
 `;
 
-const StartText = styled(Text)`
+const StartText = styled(StyledText)`
 	font-size: 15px;
 	align-self: center;
 
 	color: #6F6E6E;
 `;
 
-const CancelAndSubmitText = styled(Text)`
+const CancelAndSubmitText = styled(StyledText)`
 	font-size: 16px;
 `;
 
@@ -137,7 +137,7 @@ const SubmitButton = styled.TouchableOpacity`
 	${CancelAndSubmitButtonStyle}
 `;
 
-export default function EventScreen({ }: EventScreenRouteProp) {
+export default function Event({ }: EventRouteProp) {
 	const route = useRoute<RouteProp<Record<string, HomeScreenRouteParams>, string>>();
 	const selectedTimeDt = Object.values(route.params)[0];
 	const selectedStartDate_auto = new Date(selectedTimeDt * 1000);

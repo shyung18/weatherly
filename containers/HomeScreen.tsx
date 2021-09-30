@@ -3,18 +3,16 @@ import { Event } from 'expo-calendar';
 import { LocationGeocodedAddress } from 'expo-location';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components/native';
 import { getWeatherData } from '../components/api/weather';
-import CalendarPicker from '../components/CalendarPicker';
-import EventPicker from '../components/EventPicker';
-import changeTempScale from '../components/functions/changeTempScale';
-import getCalendarEvents from '../components/functions/getCalendarEvents';
-import getImages from '../components/functions/getImages';
-import StyledText from '../components/StyledText';
-import SummaryView from '../components/SummaryView';
-import SunIcon from '../components/SunIcon';
-import { Text } from '../components/Themed';
-import WeatherIconUnderDate from './WeatherIconUnderDates';
+import ArcBackground from '../components/Home/ArcBackground';
+import CalendarPicker from '../components/Home/CalendarPicker';
+import CurrentWeather from '../components/Home/CurrentWeather';
+import EventPicker from '../components/Home/EventPicker';
+import SummaryView from '../components/Home/SummaryView';
+import WeatherIconUnderDate from '../components/Home/WeatherIconUnderDates';
+import changeTempScale from '../functions/changeTempScale';
+import getCalendarEvents from '../functions/getCalendarEvents';
+import getImages from '../functions/getImages';
 
 type WeatherDataType = {
 	"lat": number,
@@ -134,78 +132,10 @@ type SelectedDateType = {
 	selectedIndex: number
 }
 
-type TempScaleType = "C" | "F";
+export type TempScaleType = "C" | "F";
 
-const CurrentIcon = styled.Image`
-	width: 80px;
-	height: 60px;
-`;
 
-const CurrentWeatherWrapper = styled.View`
-	width: 100%;
-	flex-direction: column;
-	align-items: center;
-`;
-
-const CurrentTemp = styled(StyledText)`
-	font-size: 33px;
-	color: #626262;
-`;
-
-const CurrentDate = styled(StyledText)`
-	font-size: 14px;
-	color: #626262;
-
-	padding-bottom: 9px;
-`;
-
-const LowHighTemp = styled(StyledText)`
-	font-size: 14px;
-	color: #626262;
-`;
-
-//Change padding top for different screen sizes to match the sunrise and sunset icons
-const CurrentWeatherInfoWrapper = styled.View`
-	width: 100%;
-	position: absolute;
-
-	margin-top: 50px;
-`;
-
-const CurrentLocationView = styled.View`
-	position: absolute;
-	top: -15px;
-	min-width: 70px;
-	
-	padding: 8px 5px;
-	margin-left: 15px;
-	border-radius: 6px;
-
-	background-color: #CDD6DE;
-`;
-
-const TempScaleView = styled.TouchableHighlight`
-	position: absolute;
-	top: -15px;
-	right: 15px;
-	min-width: 70px;
-	
-	padding: 8px 5px;
-	border-radius: 6px;
-
-	background-color: #CDD6DE;
-`;
-
-const CurrentLocationText = styled(Text)`
-	font-size: 13px;
-	color: #6F6E6E;
-
-	align-self:center;
-`;
-
-const TempScaleText = styled(CurrentLocationText)``;
-
-export default function CurrentWeatherInfoContainer() {
+export default function HomeScreen() {
 	const [eventsData, setEventsData] = useState<Event[]>();
 	const [weatherData, setWeatherData] = useState<WeatherDataType>();
 	const [selectedDate, setSelectedDate] = useState<SelectedDateType>({ selectedDate: new Date(), selectedIndex: 0 });
@@ -251,31 +181,19 @@ export default function CurrentWeatherInfoContainer() {
 	return (
 		weatherData ?
 			<>
-				<CurrentWeatherInfoWrapper>
-					<CurrentLocationView>
-						<CurrentLocationText>
-							{weatherData.location[0].city}
-						</CurrentLocationText>
-					</CurrentLocationView>
-					<CurrentWeatherWrapper>
-						<CurrentIcon source={getImages(weatherData.daily[selectedDate.selectedIndex].weather[0].main, weatherData.daily[selectedDate.selectedIndex].weather[0].icon)} />
-						{weatherData ?
-							<CurrentTemp>{dayTemp}&deg;{tempScale}
-							</CurrentTemp>
-							:
-							<CurrentTemp>Loading...</CurrentTemp>
-						}
-						<CurrentDate>{selectedDate.selectedDate.toDateString()}</CurrentDate>
-						<LowHighTemp>{minTemp} / {maxTemp} &deg;{tempScale}</LowHighTemp>
-					</CurrentWeatherWrapper>
-					<SunIcon type="sunrise" time={weatherData.daily[selectedDate.selectedIndex].sunrise} />
-					<SunIcon type="sunset" time={weatherData.daily[selectedDate.selectedIndex].sunset} />
-					<TempScaleView onPress={() => handleTempScaleOnClick()}>
-						<TempScaleText>
-							C&deg; / F&deg;
-						</TempScaleText>
-					</TempScaleView>
-				</CurrentWeatherInfoWrapper>
+				<ArcBackground />
+				<CurrentWeather
+					cityName={weatherData.location[0].city}
+					currentWeatherImgSource={getImages(weatherData.daily[selectedDate.selectedIndex].weather[0].main, weatherData.daily[selectedDate.selectedIndex].weather[0].icon)}
+					tempScale={tempScale}
+					currentTemp={dayTemp}
+					minTemp={minTemp}
+					maxTemp={maxTemp}
+					currentDate={selectedDate.selectedDate.toDateString()}
+					sunriseTime={weatherData.daily[selectedDate.selectedIndex].sunrise}
+					sunsetTime={weatherData.daily[selectedDate.selectedIndex].sunset}
+					onTempScaleChange={() => handleTempScaleOnClick()}
+				/>
 				<CalendarPicker currentDate={selectedDate.selectedDate} onClick={(date: moment.Moment) => handleOnClick(date)} />
 				<WeatherIconUnderDate dailyData={weatherData.daily} />
 				<EventPicker navigation={navigation} tempScale={tempScale} eventsData={eventsData} hourlyData={weatherData.hourly} selectedDate={selectedDate.selectedDate} selectedIndex={selectedDate.selectedIndex} />

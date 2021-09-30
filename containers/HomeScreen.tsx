@@ -12,7 +12,7 @@ import SummaryView from '../components/Home/SummaryView';
 import WeatherIconUnderDate from '../components/Home/WeatherIconUnderDates';
 import changeTempScale from '../functions/changeTempScale';
 import getCalendarEvents from '../functions/getCalendarEvents';
-import getImages from '../functions/getImages';
+import getImages from '../functions/getIconImages';
 
 type WeatherDataType = {
 	"lat": number,

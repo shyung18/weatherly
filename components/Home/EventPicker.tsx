@@ -2,7 +2,7 @@ import * as Calendar from 'expo-calendar';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import changeTempScale from '../../functions/changeTempScale';
-import getImages from '../../functions/getImages';
+import getImages from '../../functions/getIconImages';
 import StyledText from '../StyledText';
 
 interface EventPickerProps {

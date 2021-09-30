@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import getImages from '../../functions/getImages';
+import getImages from '../../functions/getIconImages';
 
 interface WeatherIconUnderDatesProps {
 	dailyData: Array<

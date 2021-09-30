@@ -3,7 +3,7 @@ import { ImageSourcePropType } from 'react-native';
 import styled from 'styled-components/native';
 import { TempScaleType } from '../../containers/HomeScreen';
 import StyledText from '../StyledText';
-import SunIcon from '../SunIcon';
+import SunIcon from './SunIcon';
 
 interface CurrentWeatherProps {
 	cityName: string,
